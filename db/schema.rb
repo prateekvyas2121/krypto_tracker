@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_31_082242) do
+ActiveRecord::Schema.define(version: 2022_07_31_134847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,11 +18,10 @@ ActiveRecord::Schema.define(version: 2022_07_31_082242) do
   create_table "alerts", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "price"
-    t.datetime "date_time"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "status", default: 0
     t.datetime "deleted_at"
+    t.integer "status", default: 0
     t.index ["deleted_at"], name: "index_alerts_on_deleted_at"
     t.index ["user_id"], name: "index_alerts_on_user_id"
   end

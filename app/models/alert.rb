@@ -9,7 +9,6 @@ class Alert < ApplicationRecord
     deleted: 2
   }
 
-  # after_commit :update_status, on: [:create, :destroy]
   before_destroy :update_status
 
   scope :filtered_alerts, ->(user, status) { 
@@ -23,8 +22,6 @@ class Alert < ApplicationRecord
   }
 
   def update_status
-    debugger
     update(status: 2)
   end
-
 end
