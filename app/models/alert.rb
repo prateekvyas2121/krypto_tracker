@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Alert model
 class Alert < ApplicationRecord
   acts_as_paranoid
 
@@ -11,14 +14,17 @@ class Alert < ApplicationRecord
 
   before_destroy :update_status
 
-  scope :filtered_alerts, ->(user, status) { 
-      if status.eql?('created')
-          @alerts = user.alerts
-      elsif status.eql?('deleted')
-          @alerts = user.alerts.only_deleted
-      else
-        @alerts = user.alerts.only_deleted + user.alerts
-      end
+  scope :filtered_alerts, lambda { |user, status|
+    @alerts = case status
+              when 'created'
+                user.alerts
+              when 'deleted'
+                user.alerts.only_deleted
+              when 'triggered'
+                user.alerts.where(status: 'triggered')
+              else
+                user.alerts.only_deleted + user.alerts
+              end
   }
 
   def update_status

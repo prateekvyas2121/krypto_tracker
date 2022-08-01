@@ -1,0 +1,3 @@
+notify_btc_price:
+   cron: "*/10 * * * * *"
+   class: "BtcPriceWorker"

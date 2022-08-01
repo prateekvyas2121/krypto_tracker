@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddDeletedAtToAlerts < ActiveRecord::Migration[6.1]
   def change
     add_column :alerts, :deleted_at, :datetime

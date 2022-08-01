@@ -1,13 +1,19 @@
+# frozen_string_literal: true
+
+# alerts controller
 class AlertsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_alert, only: :destroy
-  
 
+  # GET /alerts
+  # params[:status] = created/deleted/triggered
   def index
     @alerts = Alert.filtered_alerts(current_user, params[:status])
-    render json: @alerts, except: [:created_at, :deleted_at, :updated_at]
+    render json: @alerts, except: %i[created_at deleted_at updated_at]
   end
 
+  # POST /alerts
+  # params[:price]
   def create
     @alert = current_user.alerts.build(alert_params)
     if @alert.save
@@ -17,9 +23,10 @@ class AlertsController < ApplicationController
     end
   end
 
+  # DELETE /alerts/:id
   def destroy
     if @alert.destroy
-      render json: "Alert deleted!", status: :ok
+      render json: 'Alert deleted!', status: :ok
     else
       render json: @alert.errors.full_messages
     end
