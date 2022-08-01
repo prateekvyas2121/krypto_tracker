@@ -8,8 +8,12 @@ class AlertsController < ApplicationController
   # GET /alerts
   # params[:status] = created/deleted/triggered
   def index
-    @alerts = Alert.filtered_alerts(current_user, params[:status])
-    render json: @alerts, except: %i[created_at deleted_at updated_at]
+    # @alerts = Alert.filtered_alerts(current_user, params[:status])
+    alerts_ids = Rails.cache.fetch('alerts_ids', expires_in: 2.hours) do
+                   Alert.filtered_alerts(current_user, params[:status]).pluck(:id)
+                 end
+    _pagy, alerts = pagy(Alert.where(id: alerts_ids), items: per_page)
+    render json: alerts, except: %i[created_at deleted_at updated_at]
   end
 
   # POST /alerts

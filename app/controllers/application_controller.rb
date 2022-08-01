@@ -2,6 +2,7 @@
 
 # application_controller
 class ApplicationController < ActionController::API
+  include Pagy::Backend
   attr_accessor :current_user
 
   before_action :authenticate_user!
@@ -27,5 +28,9 @@ class ApplicationController < ActionController::API
 
   def unauthorized_access
     head(:unauthorized)
+  end
+
+  def per_page
+    params[:per_page] ||= 1
   end
 end
